@@ -1,17 +1,31 @@
+import { useEffect, useState } from "react";
+import BlogList from "./BlogList";
+
 const Home = () => {
-  const handleClick = () => {
-    console.log("hello, ninjas");
+  const [blogs, setBlogs] = useState(null);
+
+  const handleDelete = (id) => {
+    const newBlogs = blogs.filter((blog) => blog.id !== id);
+    setBlogs(newBlogs);
   };
 
-  const handleClickAgain = (name) => {
-    console.log("hello" + name);
-  };
+  useEffect(() => {
+    fetch('https"//localhost:8000/blogs')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setBlogs(data);
+      });
+  }, []);
 
-  <div className="home">
-    <h2>Homepage</h2>
-    <button onClick={handleClick}>Click me</button>
-    <button onClick={() => handleClickAgain("mario")}>Click me again</button>
-  </div>;
+  return (
+    <div className="home">
+      {blogs && (
+        <BlogList blogs={blogs} title="All blogs" handleDelete={handleDelete} />
+      )}
+    </div>
+  );
 };
 
 export default Home;
